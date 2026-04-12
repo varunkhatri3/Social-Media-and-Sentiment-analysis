@@ -25,19 +25,21 @@ def _inject_styles() -> None:
         """
         <style>
         :root {
-            --bg-accent: linear-gradient(135deg, #fff4e8 0%, #ffe4d4 45%, #ffd7c2 100%);
-            --panel-bg: rgba(255, 248, 242, 0.78);
-            --panel-border: rgba(184, 91, 59, 0.18);
-            --text-main: #2d1f1a;
-            --text-soft: #6d554b;
-            --primary: #c4572e;
-            --shadow: 0 18px 40px rgba(112, 54, 35, 0.12);
+            --bg-accent: linear-gradient(145deg, #07111f 0%, #0b1729 42%, #13233d 100%);
+            --panel-bg: rgba(9, 18, 34, 0.78);
+            --panel-border: rgba(101, 173, 255, 0.16);
+            --text-main: #f4f7fb;
+            --text-soft: #9fb0c9;
+            --primary: #4da3ff;
+            --primary-strong: #2f7fe0;
+            --shadow: 0 24px 50px rgba(0, 0, 0, 0.34);
         }
 
         .stApp {
             background:
-                radial-gradient(circle at top left, rgba(255, 255, 255, 0.92), transparent 32%),
-                radial-gradient(circle at bottom right, rgba(255, 214, 186, 0.58), transparent 26%),
+                radial-gradient(circle at top left, rgba(77, 163, 255, 0.2), transparent 24%),
+                radial-gradient(circle at 85% 20%, rgba(54, 208, 164, 0.16), transparent 18%),
+                radial-gradient(circle at bottom right, rgba(30, 62, 114, 0.35), transparent 28%),
                 var(--bg-accent);
         }
 
@@ -81,52 +83,73 @@ def _inject_styles() -> None:
         }
 
         div[data-baseweb="textarea"] textarea {
-            background: rgba(255, 250, 246, 0.94);
+            background: rgba(8, 15, 28, 0.92);
             color: var(--text-main);
             border-radius: 18px;
         }
 
         div[data-baseweb="base-input"] > div,
         div[data-baseweb="textarea"] > div {
-            border-color: rgba(196, 87, 46, 0.28) !important;
+            background: rgba(8, 15, 28, 0.92) !important;
+            border-color: rgba(77, 163, 255, 0.24) !important;
             box-shadow: none !important;
         }
 
         div[data-baseweb="textarea"] > div:focus-within {
             border-color: var(--primary) !important;
-            box-shadow: 0 0 0 1px rgba(196, 87, 46, 0.2) !important;
+            box-shadow: 0 0 0 1px rgba(77, 163, 255, 0.2) !important;
         }
 
         .stButton > button {
             border-radius: 999px;
             font-weight: 700;
             padding: 0.65rem 1.2rem;
-            border: 1px solid rgba(196, 87, 46, 0.18);
+            background: rgba(14, 25, 44, 0.9);
+            color: var(--text-main);
+            border: 1px solid rgba(77, 163, 255, 0.18);
             transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
         }
 
         .stButton > button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 10px 20px rgba(112, 54, 35, 0.12);
-            border-color: rgba(196, 87, 46, 0.34);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+            border-color: rgba(77, 163, 255, 0.34);
         }
 
         .stButton > button[kind="primary"] {
-            background: linear-gradient(135deg, #db683d 0%, #c4572e 100%);
+            background: linear-gradient(135deg, #58adff 0%, #2f7fe0 100%);
             color: white;
             border: none;
         }
 
         [data-testid="stSidebar"] {
-            background: rgba(255, 246, 239, 0.72);
-            border-right: 1px solid rgba(184, 91, 59, 0.16);
+            background: rgba(6, 13, 25, 0.88);
+            border-right: 1px solid rgba(77, 163, 255, 0.12);
         }
 
         [data-testid="stExpander"] {
-            background: rgba(255, 250, 246, 0.78);
-            border: 1px solid rgba(184, 91, 59, 0.14);
+            background: rgba(10, 18, 32, 0.84);
+            border: 1px solid rgba(77, 163, 255, 0.12);
             border-radius: 18px;
             overflow: hidden;
+        }
+
+        [data-testid="stMarkdownContainer"],
+        .stCaption,
+        label,
+        p,
+        li,
+        span {
+            color: var(--text-main);
+        }
+
+        [data-testid="stExpander"] summary,
+        [data-testid="stSidebar"] * {
+            color: var(--text-main);
+        }
+
+        [data-testid="stCodeBlock"] {
+            border-radius: 16px;
         }
 
         [data-testid="stAlert"] {
