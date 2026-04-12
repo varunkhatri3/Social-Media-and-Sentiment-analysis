@@ -2,6 +2,10 @@
 
 A machine learning project for classifying short social-media text as **negative**, **neutral**, or **positive**. The repository combines text preprocessing, TF-IDF feature extraction, a Naive Bayes classifier, and a Streamlit interface for interactive sentiment prediction.
 
+Local app URL after starting Streamlit: `http://localhost:8501`
+
+Hosted Streamlit app: `https://socialmediaandsentimentanalysis.streamlit.app/`
+
 ## Overview
 
 This project was built to explore a complete sentiment analysis workflow, from raw text preprocessing and feature engineering to model training, evaluation, and deployment in a lightweight web application.
