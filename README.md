@@ -1,15 +1,21 @@
 ﻿# Social Media Sentiment Analysis
 
-A sentiment analysis project for short social-media style text using Python, NLTK, scikit-learn, and Streamlit. The repository includes preprocessing notebooks, a trained TF-IDF plus Naive Bayes model, and a web app for interactive prediction.
+A machine learning project for classifying short social-media text as **negative**, **neutral**, or **positive**. The repository combines text preprocessing, TF-IDF feature extraction, a Naive Bayes classifier, and a Streamlit interface for interactive sentiment prediction.
 
-## Features
+## Overview
 
-- Multiclass prediction: `negative`, `neutral`, `positive`
+This project was built to explore a complete sentiment analysis workflow, from raw text preprocessing and feature engineering to model training, evaluation, and deployment in a lightweight web application.
+
+To improve prediction quality on unseen real-world phrases, the project also includes a local VADER lexicon fallback for cases where the trained classifier has limited vocabulary coverage.
+
+## Key Features
+
+- Multiclass sentiment prediction: `negative`, `neutral`, `positive`
 - Text preprocessing with URL removal, tokenization, stopword removal, and lemmatization
-- Saved TF-IDF vectorizer and trained classifier in `models/`
-- Streamlit app for single-text and bulk prediction
-- VADER lexicon fallback for phrases the trained model does not understand well
-- Notebook workflow for preprocessing, feature extraction, training, and evaluation
+- TF-IDF vectorization with a trained Naive Bayes classifier
+- Streamlit web app for single-text and bulk prediction
+- Notebook-based workflow for preprocessing, feature extraction, training, and evaluation
+- Lexicon-based fallback using VADER for better handling of unseen phrases
 
 ## Project Structure
 
@@ -37,15 +43,15 @@ A sentiment analysis project for short social-media style text using Python, NLT
    `- final_demo.ipynb
 ```
 
-## Tech Stack
+## Technology Stack
 
 - Python 3.14
-- Pandas, NumPy
+- Pandas and NumPy
 - NLTK
 - scikit-learn
 - Streamlit
 - Joblib
-- Matplotlib, Seaborn, WordCloud
+- Matplotlib, Seaborn, and WordCloud
 
 ## Setup
 
@@ -57,7 +63,7 @@ From the project root:
 python -m venv .venv
 ```
 
-### 2. Activate the virtual environment
+### 2. Activate the environment
 
 From the project root in PowerShell:
 
@@ -79,7 +85,7 @@ Run this once in the current terminal session:
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
 
-Then activate again:
+Then activate the environment again:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
@@ -93,7 +99,7 @@ Rebuild the environment:
 python -m venv --clear .venv
 ```
 
-This project previously hit a partial `venv` creation issue where `pip` was installed but the activation scripts were missing. Recreating the environment fixes that.
+This resolves cases where the virtual environment is only partially created and the activation scripts are missing.
 
 ### 5. Install dependencies
 
@@ -103,7 +109,7 @@ After activation:
 pip install -r requirements.txt
 ```
 
-## Run the App
+## Running the Application
 
 Start the Streamlit app from the project root:
 
@@ -111,20 +117,20 @@ Start the Streamlit app from the project root:
 streamlit run app.py
 ```
 
-The app uses:
+The application uses the following artifacts:
 
 - `models/tfidf_vectorizer.pkl`
 - `models/best_model.pkl`
 - `models/vader_lexicon.txt`
 
-## How Prediction Works
+## Prediction Pipeline
 
-1. Raw text is cleaned using `text_preprocessing.py`
-2. Cleaned text is transformed using the saved TF-IDF vectorizer
-3. The trained model predicts one of the three sentiment classes
-4. If the vectorizer finds no useful features, or the model confidence is weak, the project falls back to a local VADER lexicon score
+1. Input text is cleaned using the preprocessing utilities in `text_preprocessing.py`
+2. The cleaned text is transformed using the saved TF-IDF vectorizer
+3. The trained classifier predicts a sentiment label
+4. If the vectorizer finds no useful features, or the classifier confidence is weak, the system falls back to a VADER-based lexicon score
 
-This improved the behavior for common real-world phrases such as:
+This hybrid approach improves behavior for phrases such as:
 
 - `i like this product`
 - `I love this product`
@@ -133,7 +139,7 @@ This improved the behavior for common real-world phrases such as:
 
 ## Notebook Workflow
 
-Run the notebooks in this order to rebuild the pipeline:
+Run the notebooks in the following order to reproduce the pipeline:
 
 1. `notebooks/sentiment_analysis.ipynb`
 2. `notebooks/preprocessing.ipynb`
@@ -142,23 +148,21 @@ Run the notebooks in this order to rebuild the pipeline:
 5. `notebooks/evaluation_error_analysis.ipynb`
 6. `notebooks/final_demo.ipynb`
 
-## Data Files
+All notebooks were executed successfully during project verification.
 
-- `data/sample_dataset.csv`: source dataset used in the notebook pipeline
-- `data/processed_dataset.csv`: cleaned dataset after preprocessing
+## Data and Model Artifacts
+
+### Data Files
+
+- `data/sample_dataset.csv`: source dataset used in the workflow
+- `data/processed_dataset.csv`: cleaned dataset generated after preprocessing
 - `data/classification_report.txt`: saved evaluation metrics
 
-## Model Files
+### Model Files
 
 - `models/tfidf_vectorizer.pkl`: fitted TF-IDF vectorizer
 - `models/best_model.pkl`: trained sentiment classifier
-- `models/vader_lexicon.txt`: local copy of the VADER sentiment lexicon used as fallback support
-
-## Known Limitations
-
-- The current dataset is synthetic and repetitive, so reported notebook accuracy may look better than real-world performance
-- A lexicon fallback helps, but it does not replace retraining on a stronger dataset
-- Some NLTK resources must exist locally for preprocessing to work smoothly in offline environments
+- `models/vader_lexicon.txt`: local VADER lexicon used as fallback support
 
 ## Example Usage
 
@@ -170,11 +174,17 @@ print(predict_sentiment("This is terrible"))
 print(predict_sentiment("It is okay"))
 ```
 
+## Limitations
+
+- The current dataset is synthetic and repetitive, so reported notebook accuracy may be higher than real-world performance
+- The lexicon fallback improves robustness, but it does not replace retraining on a larger and more realistic dataset
+- Some NLTK resources must be available locally for preprocessing to work smoothly in offline environments
+
 ## Troubleshooting
 
 ### `Activate.ps1` is not recognized
 
-Use a relative path:
+Use a relative path instead of typing only the script name:
 
 ```powershell
 .\Activate.ps1
@@ -186,9 +196,7 @@ or
 .\.venv\Scripts\Activate.ps1
 ```
 
-Typing only `Activate.ps1` makes PowerShell search for a command, not a local script.
-
-### `Activate.ps1` still cannot be found
+### `Activate.ps1` cannot be found
 
 Check whether the file exists:
 
@@ -204,11 +212,11 @@ python -m venv --clear .venv
 
 ### Positive text is predicted as negative
 
-The original model was trained on a small synthetic dataset, so it does not generalize well. The project now uses a VADER lexicon fallback to improve predictions for unseen social-media phrases.
+The original classifier was trained on a limited synthetic dataset, so it does not generalize perfectly. The VADER fallback was added to improve prediction quality on unseen social-media phrases.
 
 ## Future Improvements
 
 - Retrain on a larger and more realistic social-media dataset
-- Add confidence scores to the Streamlit UI
-- Add tests for preprocessing and prediction behavior
-- Build a more reproducible training pipeline
+- Add confidence scores to the Streamlit interface
+- Add automated tests for preprocessing and prediction behavior
+- Build a more reproducible training and evaluation pipeline
