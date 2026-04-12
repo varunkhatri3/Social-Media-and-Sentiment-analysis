@@ -86,6 +86,7 @@ def predict_sentiment(text: str) -> str:
     if not raw:
         return "unknown"
 
+    ensure_nltk_resources()
     cleaned = preprocess_text(raw, use_pos_tag=True)
     if not cleaned.strip():
         return "unknown"

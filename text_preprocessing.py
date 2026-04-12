@@ -70,6 +70,7 @@ def preprocess_text(
         If True, use POS tags for WordNet lemmatization (slower, better quality).
         If False, lemmatize each token as a noun (faster for very large batches).
     """
+    ensure_nltk_resources()
     text = remove_urls(text)
     text = text.lower()
     tokens = word_tokenize(text)
@@ -93,6 +94,7 @@ def preprocess_text(
     return " ".join(lemmas)
 
 
+@lru_cache(maxsize=1)
 def ensure_nltk_resources() -> None:
     """Ensure required NLTK data exists locally before attempting downloads."""
     required = {
