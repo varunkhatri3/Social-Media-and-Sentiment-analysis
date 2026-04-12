@@ -10,7 +10,6 @@ dist/
 *.egg-info/
 .eggs/
 .ipynb_checkpoints/
-notebook_runs/
 .coverage
 .coverage.*
 htmlcov/
