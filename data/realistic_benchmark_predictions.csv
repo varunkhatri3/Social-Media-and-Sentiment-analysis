@@ -1,0 +1,46 @@
+text,sentiment,target,predicted_sentiment,predicted_target,correct
+"Absolutely love the new update, everything feels smoother now.",positive,2,positive,2,True
+This app is fantastic and saved me a lot of time today.,positive,2,positive,2,True
+Pretty happy with the customer support I received.,positive,2,positive,2,True
+The new design looks clean and modern.,positive,2,positive,2,True
+That feature works great and I would recommend it.,positive,2,positive,2,True
+Fast delivery and the item arrived exactly as described.,positive,2,neutral,1,False
+I am impressed by how easy this was to use.,positive,2,positive,2,True
+The team handled my issue really well.,positive,2,positive,2,True
+Super satisfied with the final result.,positive,2,positive,2,True
+This made my workflow much better.,positive,2,positive,2,True
+I enjoyed using it and would gladly use it again.,positive,2,negative,0,False
+The experience was surprisingly good overall.,positive,2,positive,2,True
+"It is not perfect, but I still like it a lot.",positive,2,positive,2,True
+Really solid performance with no major issues so far.,positive,2,neutral,1,False
+"I was skeptical at first, but this turned out great.",positive,2,positive,2,True
+"The product is okay, nothing special honestly.",neutral,1,neutral,1,True
+It works as expected.,neutral,1,neutral,1,True
+I submitted the form and got a response later.,neutral,1,neutral,1,True
+The meeting has been moved to tomorrow afternoon.,neutral,1,neutral,1,True
+"Thanks for the update, I will check it later.",neutral,1,neutral,1,True
+The package arrived today.,neutral,1,neutral,1,True
+I have no strong opinion about this change.,neutral,1,neutral,1,True
+The issue seems to be resolved for now.,neutral,1,neutral,1,True
+This is average and does the job.,neutral,1,neutral,1,True
+We reviewed the report in the morning.,neutral,1,neutral,1,True
+The call started a few minutes late.,neutral,1,neutral,1,True
+It is fine for basic use cases.,neutral,1,neutral,1,True
+"I noticed the change, but it does not affect me much.",neutral,1,positive,2,False
+The instructions were clear enough.,neutral,1,positive,2,False
+"I can use it, though it feels fairly standard.",neutral,1,neutral,1,True
+This update is terrible and broke my settings.,negative,0,negative,0,True
+I hate how slow and buggy this feels now.,negative,0,negative,0,True
+Very disappointing experience from start to finish.,negative,0,negative,0,True
+The support team was unhelpful and rude.,negative,0,negative,0,True
+This is the worst version you have released.,negative,0,negative,0,True
+The product stopped working after one day.,negative,0,negative,0,True
+I regret paying for this.,negative,0,negative,0,True
+It crashes every time I try to open it.,negative,0,negative,0,True
+The interface is confusing and frustrating.,negative,0,negative,0,True
+Waste of money and time.,negative,0,negative,0,True
+I am unhappy with the quality.,negative,0,negative,0,True
+Nothing about this works properly.,negative,0,negative,0,True
+The new layout makes everything harder to find.,negative,0,positive,2,False
+"I expected better, but this was awful.",negative,0,negative,0,True
+This change made the experience much worse.,negative,0,negative,0,True

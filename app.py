@@ -1,19 +1,19 @@
-"""
-Local sentiment demo (Streamlit).
-
-From the project root:
-    streamlit run app.py
-
-Requires `models/tfidf_vectorizer.pkl` and `models/best_model.pkl`
-(run `feature_extraction.ipynb` and `model_training.ipynb` first).
-"""
-
 from __future__ import annotations
 
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
 import streamlit as st
 
 from predict_sentiment import predict_sentiment
 from text_preprocessing import preprocess_text
+
+
+SYNTHETIC_REPORT_PATH = Path("data/classification_report.txt")
+REALISTIC_REPORT_PATH = Path("data/realistic_classification_report.txt")
+SYNTHETIC_CONFUSION_PATH = Path("notebooks/confusion_matrix.png")
+REALISTIC_CONFUSION_PATH = Path("data/realistic_confusion_matrix.png")
 
 
 if "main_input" not in st.session_state:
@@ -177,6 +177,185 @@ def clear_input() -> None:
     st.session_state["main_input"] = ""
 
 
+@st.cache_data(show_spinner=False)
+def _load_classification_report(report_path: str) -> tuple[pd.DataFrame, dict[str, float], int]:
+    report_file = Path(report_path)
+    if not report_file.exists():
+        raise FileNotFoundError(f"Missing evaluation report: {report_file}")
+
+    lines = [line.strip() for line in report_file.read_text(encoding="utf-8").splitlines() if line.strip()]
+    class_rows: list[dict[str, float | str]] = []
+    summary: dict[str, float] = {}
+    total_support = 0
+
+    for line in lines[1:]:
+        parts = line.split()
+        if len(parts) == 5:
+            label, precision, recall, f1_score, support = parts
+            class_rows.append(
+                {
+                    "label": label,
+                    "precision": float(precision),
+                    "recall": float(recall),
+                    "f1_score": float(f1_score),
+                    "support": int(support),
+                }
+            )
+        elif parts and parts[0] == "accuracy" and len(parts) >= 3:
+            summary["accuracy"] = float(parts[-2])
+            total_support = int(parts[-1])
+        elif len(parts) >= 5 and "avg" in parts:
+            key = "_".join(parts[:-4])
+            summary[f"{key}_precision"] = float(parts[-4])
+            summary[f"{key}_recall"] = float(parts[-3])
+            summary[f"{key}_f1_score"] = float(parts[-2])
+            summary[f"{key}_support"] = int(parts[-1])
+
+    if not class_rows:
+        raise ValueError("Classification report could not be parsed.")
+
+    return pd.DataFrame(class_rows), summary, total_support
+
+
+def _render_evaluation_panel(
+    title: str,
+    report_path: Path,
+    confusion_path: Path | None,
+    source_note: str,
+    show_perfect_score_warning: bool = False,
+) -> None:
+    metrics_df, summary, total_support = _load_classification_report(str(report_path))
+
+    st.markdown(f"#### {title}")
+    st.caption(source_note)
+
+    accuracy = summary.get("accuracy", 0.0)
+    macro_precision = summary.get("macro_avg_precision", 0.0)
+    macro_recall = summary.get("macro_avg_recall", 0.0)
+    macro_f1 = summary.get("macro_avg_f1_score", 0.0)
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Accuracy", f"{accuracy:.2%}")
+    c2.metric("Precision", f"{macro_precision:.2%}")
+    c3.metric("Recall", f"{macro_recall:.2%}")
+    c4.metric("F1 Score", f"{macro_f1:.2%}")
+
+    if (
+        show_perfect_score_warning
+        and accuracy >= 0.999
+        and macro_precision >= 0.999
+        and macro_recall >= 0.999
+        and macro_f1 >= 0.999
+    ):
+        st.warning(
+            "These near-perfect metrics are likely inflated by the synthetic, repetitive dataset. "
+            "They are useful for demonstrating the pipeline, but they should not be treated as realistic "
+            "real-world sentiment performance."
+        )
+        st.caption(
+            "The train/test split is already stratified and the TF-IDF vectorizer is fit on training data only. "
+            "The bigger limitation here is dataset simplicity, not an obvious evaluation bug."
+        )
+
+    chart_df = (
+        metrics_df[["label", "precision", "recall", "f1_score"]]
+        .set_index("label")
+        .rename(columns={"f1_score": "f1 score"})
+    )
+    st.bar_chart(chart_df, use_container_width=True)
+
+    pie_left, pie_mid, pie_right = st.columns([1, 1, 1.15])
+
+    with pie_left:
+        fig, ax = plt.subplots(figsize=(4.8, 4.8))
+        ax.pie(
+            metrics_df["support"],
+            labels=metrics_df["label"].str.title(),
+            autopct="%1.1f%%",
+            startangle=90,
+            wedgeprops={"edgecolor": "white", "linewidth": 1},
+        )
+        ax.set_title("Class Distribution")
+        ax.axis("equal")
+        st.pyplot(fig, clear_figure=True)
+
+    with pie_mid:
+        fig, ax = plt.subplots(figsize=(4.8, 4.8))
+        correct = round(accuracy * total_support)
+        incorrect = max(total_support - correct, 0)
+        values = [correct, incorrect]
+        labels = ["Correct", "Incorrect"]
+        if incorrect == 0:
+            values = [correct]
+            labels = ["Correct"]
+        ax.pie(
+            values,
+            labels=labels,
+            autopct="%1.1f%%",
+            startangle=90,
+            colors=["#4da3ff", "#ff6b6b"][: len(values)],
+            wedgeprops={"width": 0.42, "edgecolor": "white", "linewidth": 1},
+        )
+        ax.set_title("Accuracy Split")
+        ax.axis("equal")
+        st.pyplot(fig, clear_figure=True)
+
+    with pie_right:
+        if confusion_path and confusion_path.exists():
+            st.image(str(confusion_path), caption="Confusion matrix", use_container_width=True)
+        else:
+            st.info("Confusion matrix image not found.")
+
+    with st.expander("Evaluation table"):
+        display_df = metrics_df.copy()
+        for col in ["precision", "recall", "f1_score"]:
+            display_df[col] = display_df[col].map(lambda value: f"{value:.2%}")
+        st.dataframe(display_df, use_container_width=True, hide_index=True)
+
+
+def _show_evaluation_dashboard() -> None:
+    st.markdown("### Model evaluation")
+
+    panels: list[tuple[str, Path, Path | None, str, bool]] = []
+    if REALISTIC_REPORT_PATH.exists():
+        panels.append(
+            (
+                "Realistic benchmark",
+                REALISTIC_REPORT_PATH,
+                REALISTIC_CONFUSION_PATH,
+                "Measured on a curated set of more natural social-media-style sentences. "
+                "This is the better indicator of real-world performance.",
+                False,
+            )
+        )
+    if SYNTHETIC_REPORT_PATH.exists():
+        panels.append(
+            (
+                "Synthetic holdout",
+                SYNTHETIC_REPORT_PATH,
+                SYNTHETIC_CONFUSION_PATH,
+                "Measured on the synthetic project dataset. Useful for pipeline validation, but easier than real data.",
+                True,
+            )
+        )
+
+    if not panels:
+        st.info("No evaluation artifacts were found.")
+        return
+
+    if len(panels) == 1:
+        title, report_path, confusion_path, source_note, warn = panels[0]
+        _render_evaluation_panel(title, report_path, confusion_path, source_note, warn)
+        return
+
+    tab_labels = [panel[0] for panel in panels]
+    tabs = st.tabs(tab_labels)
+    for tab, panel in zip(tabs, panels):
+        title, report_path, confusion_path, source_note, warn = panel
+        with tab:
+            _render_evaluation_panel(title, report_path, confusion_path, source_note, warn)
+
+
 st.set_page_config(
     page_title="Sentiment analysis",
     page_icon="💬",
@@ -244,6 +423,7 @@ if analyze:
                 st.exception(e)
                 st.stop()
         _show_result(label)
+        _show_evaluation_dashboard()
         with st.expander("Preprocessed text"):
             cleaned = preprocess_text(text, use_pos_tag=True)
             st.code(cleaned or "(empty after cleaning)", language=None)

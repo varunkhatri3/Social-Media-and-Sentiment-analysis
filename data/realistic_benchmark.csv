@@ -1,0 +1,46 @@
+text,sentiment,target
+"Absolutely love the new update, everything feels smoother now.",positive,2
+"This app is fantastic and saved me a lot of time today.",positive,2
+"Pretty happy with the customer support I received.",positive,2
+"The new design looks clean and modern.",positive,2
+"That feature works great and I would recommend it.",positive,2
+"Fast delivery and the item arrived exactly as described.",positive,2
+"I am impressed by how easy this was to use.",positive,2
+"The team handled my issue really well.",positive,2
+"Super satisfied with the final result.",positive,2
+"This made my workflow much better.",positive,2
+"I enjoyed using it and would gladly use it again.",positive,2
+"The experience was surprisingly good overall.",positive,2
+"It is not perfect, but I still like it a lot.",positive,2
+"Really solid performance with no major issues so far.",positive,2
+"I was skeptical at first, but this turned out great.",positive,2
+"The product is okay, nothing special honestly.",neutral,1
+"It works as expected.",neutral,1
+"I submitted the form and got a response later.",neutral,1
+"The meeting has been moved to tomorrow afternoon.",neutral,1
+"Thanks for the update, I will check it later.",neutral,1
+"The package arrived today.",neutral,1
+"I have no strong opinion about this change.",neutral,1
+"The issue seems to be resolved for now.",neutral,1
+"This is average and does the job.",neutral,1
+"We reviewed the report in the morning.",neutral,1
+"The call started a few minutes late.",neutral,1
+"It is fine for basic use cases.",neutral,1
+"I noticed the change, but it does not affect me much.",neutral,1
+"The instructions were clear enough.",neutral,1
+"I can use it, though it feels fairly standard.",neutral,1
+"This update is terrible and broke my settings.",negative,0
+"I hate how slow and buggy this feels now.",negative,0
+"Very disappointing experience from start to finish.",negative,0
+"The support team was unhelpful and rude.",negative,0
+"This is the worst version you have released.",negative,0
+"The product stopped working after one day.",negative,0
+"I regret paying for this.",negative,0
+"It crashes every time I try to open it.",negative,0
+"The interface is confusing and frustrating.",negative,0
+"Waste of money and time.",negative,0
+"I am unhappy with the quality.",negative,0
+"Nothing about this works properly.",negative,0
+"The new layout makes everything harder to find.",negative,0
+"I expected better, but this was awful.",negative,0
+"This change made the experience much worse.",negative,0

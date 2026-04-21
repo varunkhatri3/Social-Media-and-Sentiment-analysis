@@ -26,6 +26,7 @@ To improve prediction quality on unseen real-world phrases, the project also inc
 ```text
 .
 |- app.py
+|- evaluate_realistic_benchmark.py
 |- predict_sentiment.py
 |- text_preprocessing.py
 |- requirements.txt
@@ -33,7 +34,12 @@ To improve prediction quality on unseen real-world phrases, the project also inc
 |- data/
 |  |- sample_dataset.csv
 |  |- processed_dataset.csv
-|  `- classification_report.txt
+|  |- classification_report.txt
+|  |- realistic_benchmark.csv
+|  |- realistic_benchmark_predictions.csv
+|  |- realistic_classification_report.txt
+|  |- realistic_confusion_matrix.csv
+|  `- realistic_confusion_matrix.png
 |- models/
 |  |- best_model.pkl
 |  |- tfidf_vectorizer.pkl
@@ -126,6 +132,8 @@ The application uses the following artifacts:
 - `models/tfidf_vectorizer.pkl`
 - `models/best_model.pkl`
 - `models/vader_lexicon.txt`
+- `data/realistic_classification_report.txt`
+- `data/realistic_confusion_matrix.png`
 
 ## Prediction Pipeline
 
@@ -160,7 +168,10 @@ All notebooks were executed successfully during project verification.
 
 - `data/sample_dataset.csv`: source dataset used in the workflow
 - `data/processed_dataset.csv`: cleaned dataset generated after preprocessing
-- `data/classification_report.txt`: saved evaluation metrics
+- `data/classification_report.txt`: evaluation metrics on the synthetic holdout split
+- `data/realistic_benchmark.csv`: curated benchmark with more natural sentences
+- `data/realistic_classification_report.txt`: evaluation metrics on the realistic benchmark
+- `data/realistic_confusion_matrix.png`: saved confusion matrix for the realistic benchmark
 
 ### Model Files
 
@@ -181,8 +192,19 @@ print(predict_sentiment("It is okay"))
 ## Limitations
 
 - The current dataset is synthetic and repetitive, so reported notebook accuracy may be higher than real-world performance
+- A separate realistic benchmark is included to provide a more believable evaluation than the synthetic split alone
 - The lexicon fallback improves robustness, but it does not replace retraining on a larger and more realistic dataset
 - Some NLTK resources must be available locally for preprocessing to work smoothly in offline environments
+
+## Realistic Evaluation
+
+The repository now includes a curated benchmark in `data/realistic_benchmark.csv` to evaluate the saved model on more natural sentences. This produces a more believable score than the synthetic dataset alone and is what the Streamlit app shows first in the evaluation section.
+
+To regenerate the benchmark report and confusion matrix:
+
+```powershell
+python evaluate_realistic_benchmark.py
+```
 
 ## Troubleshooting
 
