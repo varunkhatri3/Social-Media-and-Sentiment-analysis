@@ -2,7 +2,7 @@
 
 A machine learning project for classifying short social-media text as **negative**, **neutral**, or **positive**. The repository combines text preprocessing, TF-IDF feature extraction, a Naive Bayes classifier, and a Streamlit interface for interactive sentiment prediction.
 
-Local app URL after starting Streamlit: [http://localhost:8502](http://localhost:8502)
+Local app URL after starting Streamlit: typically `http://localhost:8501` unless you override the Streamlit port locally
 
 Hosted Streamlit app: [Open the Streamlit project](https://socialmediaandsentimentanalysis.streamlit.app/)
 
@@ -44,7 +44,20 @@ To improve prediction quality on unseen real-world phrases, the project also inc
 |  |- best_model.pkl
 |  |- tfidf_vectorizer.pkl
 |  `- vader_lexicon.txt
-`- notebooks/
+|- notebooks/
+|  |- sentiment_analysis.ipynb
+|  |- preprocessing.ipynb
+|  |- feature_extraction.ipynb
+|  |- model_training.ipynb
+|  |- evaluation_error_analysis.ipynb
+|  |- final_demo.ipynb
+|  |- confusion_matrix.png
+|  |- eda_class_balance.png
+|  |- eda_length_by_sentiment.png
+|  |- prediction_distribution_pie.png
+|  |- sentiment_distribution_pie.png
+|  `- wordclouds_pos_neg_neu.png
+`- notebook_runs/
    |- sentiment_analysis.ipynb
    |- preprocessing.ipynb
    |- feature_extraction.ipynb
@@ -127,6 +140,8 @@ Start the Streamlit app from the project root:
 streamlit run app.py
 ```
 
+Then open the local URL printed by Streamlit in the terminal.
+
 The application uses the following artifacts:
 
 - `models/tfidf_vectorizer.pkl`
@@ -134,6 +149,8 @@ The application uses the following artifacts:
 - `models/vader_lexicon.txt`
 - `data/realistic_classification_report.txt`
 - `data/realistic_confusion_matrix.png`
+- `data/classification_report.txt`
+- `notebooks/confusion_matrix.png`
 
 ## Prediction Pipeline
 
@@ -160,7 +177,7 @@ Run the notebooks in the following order to reproduce the pipeline:
 5. `notebooks/evaluation_error_analysis.ipynb`
 6. `notebooks/final_demo.ipynb`
 
-All notebooks were executed successfully during project verification.
+The repo also includes mirrored executed copies under `notebook_runs/`.
 
 ## Data and Model Artifacts
 
@@ -170,7 +187,9 @@ All notebooks were executed successfully during project verification.
 - `data/processed_dataset.csv`: cleaned dataset generated after preprocessing
 - `data/classification_report.txt`: evaluation metrics on the synthetic holdout split
 - `data/realistic_benchmark.csv`: curated benchmark with more natural sentences
+- `data/realistic_benchmark_predictions.csv`: saved predictions generated from the realistic benchmark script
 - `data/realistic_classification_report.txt`: evaluation metrics on the realistic benchmark
+- `data/realistic_confusion_matrix.csv`: raw confusion matrix values for the realistic benchmark
 - `data/realistic_confusion_matrix.png`: saved confusion matrix for the realistic benchmark
 
 ### Model Files
@@ -205,6 +224,13 @@ To regenerate the benchmark report and confusion matrix:
 ```powershell
 python evaluate_realistic_benchmark.py
 ```
+
+This script updates:
+
+- `data/realistic_benchmark_predictions.csv`
+- `data/realistic_classification_report.txt`
+- `data/realistic_confusion_matrix.csv`
+- `data/realistic_confusion_matrix.png`
 
 ## Troubleshooting
 
