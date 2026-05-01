@@ -368,7 +368,7 @@ st.markdown(
     """
     <section class="hero-card">
         <div class="hero-eyebrow">Sentiment Intelligence</div>
-        <h1 class="hero-title">Feedback  Sentiment Analysis</h1>
+        <h1 class="hero-title">Feedback Sentiment Analysis</h1>
         <p class="hero-copy">
             Analyze short-form text as negative, neutral, or positive using the
             trained classifier and the same preprocessing pipeline used during training.
